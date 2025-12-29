@@ -1,0 +1,70 @@
+name: Build PseudoPTY Server & Client
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Build Engine.dll
+      run: msbuild Engine.vcxproj /p:Configuration=Release /p:Platform=x64
+
+    - name: Build WindowsPty.dll
+      run: msbuild WindowsPty.vcxproj /p:Configuration=Release /p:Platform=x64
+
+    - name: Build ServerPackets.dll
+      run: msbuild ServerPackets.vcxproj /p:Configuration=Release /p:Platform=x64
+
+    - name: Build Server.exe
+      run: msbuild Server.vcxproj /p:Configuration=Release /p:Platform=x64
+
+    - name: Build Client.exe
+      run: msbuild Client.vcxproj /p:Configuration=Release /p:Platform=x64
+
+    - name: Create release tag
+      id: tag
+      run: |
+        TAG=v1.0.0
+        echo "TAG=$TAG" >> $GITHUB_ENV
+        git tag $TAG
+        git push origin $TAG
+
+    - name: Create ZIP of binaries
+      run: |
+        mkdir release
+        copy /y bin\x64\Release\Engine.dll release\
+        copy /y bin\x64\Release\WindowsPty.dll release\
+        copy /y bin\x64\Release\ServerPackets.dll release\
+        copy /y bin\x64\Release\Server.exe release\
+        copy /y bin\x64\Release\Client.exe release\
+        powershell Compress-Archive -Path release\* -DestinationPath PseudoPTY_Server_And_Client.zip
+
+    - name: Create GitHub release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ env.TAG }}
+        name: ${{ env.TAG }}
+        body: "PseudoPTY Server & Client release ${{ env.TAG }}"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload ZIP to release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: PseudoPTY_Server_And_Client.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
