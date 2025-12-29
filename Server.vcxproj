@@ -1,0 +1,43 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{44444444-4444-4444-4444-444444444444}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>PseudoPTY_Server</RootNamespace>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <OutDir>$(MSBuildThisFileDirectory)bin\x64\Release\</OutDir>
+    <TargetName>Server</TargetName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ClCompile Include="src\Server.c" />
+    <ClInclude Include="src\Server.h" />
+    <ClInclude Include="src\WindowsPty.h" />
+    <ClInclude Include="src\ServerPackets.h" />
+  </ItemGroup>
+
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Link>
+      <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)bin\x64\Release\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>WindowsPty.lib;ServerPackets.lib;Engine.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+</Project>
