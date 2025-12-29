@@ -32,7 +32,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
       <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)bin\x64\Release\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WindowsPty.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Engine.lib;WindowsPty.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
 
