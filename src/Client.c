@@ -1,6 +1,6 @@
 #include "Client.h"
-#include <winsock2.h>
 #define _WINSOCKAPI_  
+#include <winsock2.h>
 #include <windows.h>
 #include <stdio.h>
 #include <string.h>
