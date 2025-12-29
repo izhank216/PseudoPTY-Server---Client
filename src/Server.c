@@ -2,10 +2,10 @@
 #include "WindowsPty.h"
 #include "ServerPackets.h"
 
-
+#define _WINSOCKAPI_ 
 #include <winsock2.h>
 
-#define _WINSOCKAPI_ 
+
 #include <windows.h>
 
 
